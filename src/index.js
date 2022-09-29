@@ -49,27 +49,29 @@ function onSearch(e) {
 };
 
 
-function fetchCountries(name) {
+function fetchCountries() {
     // body
     // fetch('https://restcountries.com/v3.1/name/peru')
-    fetch(
-      'https://restcountries.com/v3.1/name/peru?fields=flags,name,capital,population,languages'
+    return fetch(
+        'https://restcountries.com/v3.1/name/peru?fields=flags,name,capital,population,languages'
     )
-      .then(response => {
+    .then(response => {
         return response.json();
-      })
-      .then(coountry => {
-        console.log('🚀 ~ fetchCountries ~ coountry', coountry);
-        const markup = createCountriInfo(coountry);
-        console.log('🚀 ~ fetchCountries ~ markup', markup);
-      })
-      .catch(error => {
-        console.log('🚀 ~ fetchCountries ~ error', error);
-      });
+    });
 }
-
-fetchCountries();
+fetchCountries()
+  .then(renderCountry)
+  .catch(error => {
+    console.log('🚀 ~ fetchCountries ~ error', error);
+  });
 // console.log("🚀 ~ fetchCountries", fetchCountries)
+
+function renderCountry(country) {
+  console.log('🚀 ~ fetchCountries ~ coountry', country);
+  const markup = createCountriInfo(country);
+  console.log('🚀 ~ fetchCountries ~ markup', markup);
+  countryList.innerHTML = markup;
+}
 
 function createCountriList(countries) {
   return countries.map(
