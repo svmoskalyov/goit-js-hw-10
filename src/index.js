@@ -49,17 +49,17 @@ function onSearch(e) {
 };
 
 
-function fetchCountries() {
+function fetchCountries(name) {
     // body
     // fetch('https://restcountries.com/v3.1/name/peru')
     return fetch(
-        'https://restcountries.com/v3.1/name/peru?fields=flags,name,capital,population,languages'
+        `https://restcountries.com/v3.1/name/${name}?fields=flags,name,capital,population,languages`
     )
     .then(response => {
         return response.json();
-    });
+    })
 }
-fetchCountries()
+fetchCountries('peru')
   .then(renderCountry)
   .catch(error => {
     console.log('🚀 ~ fetchCountries ~ error', error);
