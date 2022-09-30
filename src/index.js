@@ -20,15 +20,52 @@ inputSearch.addEventListener('input', onSearch);
 function onSearch(e) {
     e.preventDefault();
     const { value } = e.target;
-    const normalizeInput = value.trim().toLowerCase();
-    console.log("🚀 ~ onSearch ~ normalizeInput", normalizeInput)
+    const searchQuery = value.trim().toLowerCase();
+    console.log('🚀 ~ onSearch ~ normalizeInput', searchQuery);
 
-    // if (!normalizeInput) {
-    //     setErrorText('');
-    //     setListHTML('');
-    //     return;
-    // }
+  fetchCountries('ukr')
+    .then(countryArr => {
+      console.log(countryArr.length);
+      console.log('🚀 ~ countryArr', countryArr);
 
+      if (countryArr.length > 10) {
+        console.log('>10');
+        console.log(
+          'Too many matches found. Please enter a more specific name.'
+        );
+
+        // Notify.info(
+        //   'Too many matches found. Please enter a more specific name.'
+        // );
+      }
+
+      if (countryArr.length >= 2 && countryArr.length <= 10) {
+        console.log('2-10');
+        // list country
+      }
+
+      if (countryArr.length === 1) {
+        console.log('=1');
+        // info country
+      }
+
+
+      // renderCountries(data);
+    })
+    .catch(error => {
+      // console.log('🚀 ~ fetchCountries ~ error', error);
+      console.log('🚀 ~ fetchCountries ~ error', error.message);
+      console.log('Oops, there is no country with that name');
+      // Notify.failure('Oops, there is no country with that name');
+    });
+  
+  
+  // if (!searchQuery) {
+  //   console.log('Oops, there is no country with that name');
+  //     return;
+  //   }
+  
+  
     // const findCountry = fetchCountries.filter(({ name }) => {
     //     return name.toLowerCase().includes(normalizeInput);
     // });
@@ -64,16 +101,17 @@ function fetchCountries(name) {
 // return Promise.all(prom);
 };
 
-fetchCountries('uk')
-  .then(data => {
-    console.log('🚀 ~ data', data);
-    // console.log(data.length);
-    renderCountry(data);
-  })
-  .catch(error => {
-    // console.log('🚀 ~ fetchCountries ~ error', error);
-    console.log('🚀 ~ fetchCountries ~ error', error.message);
-  });
+// fetchCountries('uk')
+//   .then(data => {
+//     console.log('🚀 ~ data', data);
+//     // console.log(data.length);
+//     renderCountries(data);
+//   })
+//   .catch(error => {
+//     // console.log('🚀 ~ fetchCountries ~ error', error);
+//     console.log('🚀 ~ fetchCountries ~ error', error.message);
+//     console.log('Oops, there is no country with that name');
+//   });
 
 
 // function fetchCountries(name) {
@@ -88,15 +126,15 @@ fetchCountries('uk')
 //   });
 // }
 // fetchCountries('peru')
-//   .then(renderCountry)
+//   .then(renderCountries)
 //   .catch(error => {
 //     console.log('🚀 ~ fetchCountries ~ error', error);
 //   });
 
 
-function renderCountry(countries) {
-  console.log("🚀 ~ renderCountry ~ countries", countries)
-  console.log('countries length -', countries.length);
+function renderCountries(countries) {
+  // console.log("🚀 ~ renderCountries ~ countries", countries)
+  // console.log('countries length -', countries.length);
 
 //   const markup = countries.map(country => {
 //     console.log('🚀 ~ markup ~ country', country);
@@ -113,27 +151,27 @@ function renderCountry(countries) {
   // });
 
   // countryInfo.innerHTML = markup;
-  // console.log("🚀 ~ renderCountry ~ markup", markup)
+  // console.log("🚀 ~ renderCountries ~ markup", markup)
   
   // console.log('🚀 ~ fetchCountries ~ coountry', country);
-  const markup = createCountriInfo(countries);
+  const markup = createCountryOne(countries);
   // const markup = createCountriList(countries);
   // console.log('🚀 ~ fetchCountries ~ markup', markup);
   // countryList.innerHTML = markup;
   countryInfo.innerHTML = markup;
 }
 
-function createCountriList(countries) {
+function createCountryList(countries) {
   return countries.map(
-    ({ name, capital }) =>
+    ({ flags, name }) =>
       `<li>
-  <h5> Country name: ${name}</h5>
-  <p>Country capital: ${capital}</p>
+  <h5> Country name: ${name.official}</h5>
+  <p>Country capital: ${flags.svg}</p>
   </li>`
   );
 }
 
-function createCountriInfo(country) {
+function createCountryOne(country) {
   // console.log("🚀 ~ createCountriInfo ~ country", country)
   return country.map(({ flags, name, capital, population, languages }) => 
   // const { flags, name, capital, population, languages } = country[0];
@@ -166,16 +204,16 @@ function createCountriInfo(country) {
 // languages - масив мов
 
 
-function setListHTML(string) {
-//   listRef.innerHTML = string;
-  countryList.innerHTML = string;
+// function setListHTML(string) {
+// //   listRef.innerHTML = string;
+//   countryList.innerHTML = string;
     
-}
+// }
 
-function setErrorText(text) {
-//   outputErrorRef.textContent = text;
-    console.log('ERROR -->', text);
-}
+// function setErrorText(text) {
+// //   outputErrorRef.textContent = text;
+//     console.log('ERROR -->', text);
+// }
 
 
 
@@ -194,17 +232,3 @@ function setErrorText(text) {
 // if (!country) {
 //   return Notify.failure('Oops, there is no country with that name');
 // }
-
-// fetch('https://jsonplaceholder.typicode.com/users')
-//   .then(response => {
-//     if (!response.ok) {
-//       throw new Error(response.status);
-//     }
-//     return response.json();
-//   })
-//   .then(data => {
-//     // Data handling
-//   })
-//   .catch(error => {
-//     // Error handling
-//   });
